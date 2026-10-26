@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>키패드 피아노 타일</title>
+<style>
+  :root {
+    --bg: #0e1220;
+    --bar: #1a2034;
+    --line: #2b3450;
+    --text: #e8ecf6;
+    --muted: #8d97b5;
+    --accent: #ffcc33;
+    --ok: #3ddc84;
+    --off: #ff5a5a;
+    --warn: #ffb020;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--text); font-family: "Malgun Gothic", "Apple SD Gothic Neo", system-ui, sans-serif; }
+  .padbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; padding: 8px 14px; background: var(--bar); border-bottom: 1px solid var(--line); font-size: 14px; }
+  .padbar .status { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
+  .padbar .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--off); display: inline-block; }
+  .padbar .dot[data-s="on"] { background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+  .padbar button { font: inherit; font-weight: 700; color: #1b1300; background: var(--accent); border: 0; border-radius: 6px; padding: 5px 12px; cursor: pointer; }
+  .padbar .hint { color: var(--muted); font-size: 12px; }
+  .padbar .msg { color: var(--warn); font-size: 13px; }
+  canvas { display: block; margin: 8px auto; border-radius: 8px; background: #000; }
+</style>
+</head>
+<body>
+<canvas id="game" width="960" height="640"></canvas>
+<script type="module" src="tiles.js"></script>
+</body>
+</html>

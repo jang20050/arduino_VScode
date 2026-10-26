@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>조이스틱 아케이드</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  main { max-width: 900px; margin: 0 auto; padding: 32px 16px; }
+  h1 { margin: 0 0 6px; font-size: 32px; letter-spacing: -0.5px; }
+  .sub { margin: 0 0 28px; color: var(--muted); }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+  .card {
+    display: block;
+    text-decoration: none;
+    color: var(--text);
+    background: var(--bar);
+    border: 2px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: transform 0.12s, border-color 0.12s;
+  }
+  .card.sel { border-color: var(--accent); transform: translateY(-3px); }
+  .card .art { height: 150px; display: grid; place-items: center; font-size: 56px; }
+  .card.platform .art { background: linear-gradient(#5c94fc 70%, #c84c0c 70%); }
+  .card.shooter .art { background: linear-gradient(#0b3d73, #1b6fb5); }
+  .card .body { padding: 14px 16px 18px; }
+  .card h2 { margin: 0 0 8px; font-size: 20px; }
+  .card ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 14px; line-height: 1.7; }
+  .help { margin-top: 28px; color: var(--muted); font-size: 14px; line-height: 1.7; }
+  .help b { color: var(--text); }
+</style>
+</head>
+<body>
+<main>
+  <h1>조이스틱 아케이드</h1>
+  <p class="sub">스틱 좌우로 고르고 택트 스위치로 시작하세요.</p>
+  <div class="cards">
+    <a class="card platform sel" href="platform.html">
+      <div class="art">🍄</div>
+      <div class="body">
+        <h2>슈퍼 조이 브로스</h2>
+        <ul>
+          <li>스틱 좌우: 이동 (많이 기울일수록 빠르게)</li>
+          <li>스틱 아래: 웅크리기</li>
+          <li>택트 스위치: 점프 (길게 누르면 더 높이)</li>
+          <li>스틱 누르기(SW): 일시정지</li>
+        </ul>
+      </div>
+    </a>
+    <a class="card shooter" href="shooter.html">
+      <div class="art">✈️</div>
+      <div class="body">
+        <h2>조이 스트라이커 1945</h2>
+        <ul>
+          <li>스틱 상하좌우: 비행기 이동</li>
+          <li>택트 스위치: 공격 (누르고 있으면 연사)</li>
+          <li>스틱 누르기(SW): 폭탄</li>
+        </ul>
+      </div>
+    </a>
+  </div>
+  <p class="help">
+    처음 한 번은 위쪽 <b>조이스틱 연결</b>을 눌러 아두이노 포트(USB 직렬 장치)를 고르세요. 그다음부터는 자동으로 연결됩니다.<br>
+    연결하는 순간 스틱 중앙을 맞추므로 스틱에서 손을 떼고 있어 주세요. 방향이 반대로 움직이면 <b>설정</b>에서 반전하세요.
+  </p>
+</main>
+<script type="module">
+  import { input, mountBar, runLoop } from './joy.js';
+  mountBar('조이스틱 아케이드', { home: false });
+  const cards = [...document.querySelectorAll('.card')];
+  let sel = 0;
+  const select = i => {
+    sel = (i + cards.length) % cards.length;
+    cards.forEach((c, j) => c.classList.toggle('sel', j === sel));
+  };
+  cards.forEach((c, i) => c.addEventListener('mouseenter', () => select(i)));
+  runLoop(() => {
+    if (input.leftDown || input.upDown) select(sel - 1);
+    if (input.rightDown || input.downDown) select(sel + 1);
+    if (input.btnDown) location.href = cards[sel].getAttribute('href');
+  }, () => {});
+</script>
+</body>
+</html>
